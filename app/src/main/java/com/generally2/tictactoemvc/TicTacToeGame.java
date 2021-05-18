@@ -54,10 +54,89 @@ public class TicTacToeGame {
         }
 
         private void checkForWin() {
-            if (!(this.gameState == GameState.X_TURN || this.gameState ==GameState.O_TURN)){
+            if (!(this.gameState == GameState.X_TURN || this.gameState == GameState.O_TURN)) {
                 return;
             }
-
         }
+
+            private boolean isBoardFull(){
+                for (int row = 0; row < NUM_ROWS; row++){
+                    for (int col = 0; col<NUM_COLUMNS; col++){
+                        if (this.boardArray[row][col] == MARK_NONE){
+                            Log.d("TicTacToeGame", "Empty at Row: " + row + "Col: " + col);
+                            return false;
+
+                        }
+
+                    }
+
+                }
+                return true;
+            }
+
+        private boolean didPieceWin(int markType){
+            boolean allMarksMatch = true;
+            for (int col = 0; col < NUM_COLUMNS;col++){
+                allMarksMatch = true;
+                for (int row = 0; row < NUM_ROWS; row++){
+                    if (this.boardArray[row][col] != markType){
+                        allMarksMatch = false;
+                        break;
+
+                    }
+                }
+                if (allMarksMatch){
+                    return true;
+                }
+
+            }
+
+            for (int row = 0; row < NUM_ROWS; row++){
+                allMarksMatch = true;
+                for (int col = 0; col < NUM_COLUMNS; col++){
+                    if (this.boardArray[row][col] != markType){
+                        allMarksMatch = false;
+                        break;
+                    }
+                }
+                if (allMarksMatch){
+                    return true;
+
+                }
+            }
+            if (this.boardArray[0][0] == markType && this.boardArray[1][1] == markType && this.boardArray[2][2] == markType){
+                return true;
+            }
+
+            if (this.boardArray[2][0] ==markType && this. boardArray[1][1] == markType && this.boardArray[0][2] == markType){
+                return true;
+
+            }
+
+            return false;
+        }
+        public String stringForGameState(){
+            String gameStateLabel = "";
+            Resources r = this.context.getResources();
+            switch (this.gameState){
+                case X_TURN:
+                    gameStateLabel = r.getString(R.string.x_turn);
+                    break;
+                case O_TURN:
+                    gameStateLabel = r.getString(R.string.o_turn);
+                    break;
+                case X_WIN:
+                    gameStateLabel = r.getString(R.string.x_win);
+                    break;
+                case O_WIN:
+                    gameStateLabel = r.getString(R.string.o_win);
+                    break;
+                default:
+                    gameStateLabel = r.getString(R.string.tie_game);
+                    break;
+            }
+            return gameStateLabel;
+        }
+
     }
 }
