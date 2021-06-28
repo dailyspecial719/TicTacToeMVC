@@ -6,6 +6,10 @@ import android.util.Log;
 
 
 public class TicTacToeGame {
+
+
+
+
     private enum GameState {
         X_TURN,
         O_TURN,
@@ -13,6 +17,8 @@ public class TicTacToeGame {
         O_WIN,
         TIE_GAME;
     }
+
+
 
     private GameState gameState;
     private int[][] boardArray;
@@ -25,10 +31,12 @@ public class TicTacToeGame {
     private static final int MARK_X = 1;
     private static final int MARK_O = 2;
 
-    public void TicTacToeGame(Context context) {
+
+    public TicTacToeGame(Context context) {
         this.context = context;
         resetGame();
     }
+    
 
     public void resetGame() {
         this.boardArray = new int[NUM_ROWS][NUM_COLUMNS];
@@ -36,12 +44,12 @@ public class TicTacToeGame {
     }
 
     public void pressedButtonAtLocation(int row, int column) {
-        if (row < 0 || row > NUM_ROWS || column < 0 || column > NUM_COLUMNS) {
-            return; // not a valid square location
-        }
-        if (this.boardArray[row][column] != MARK_NONE) {
-            return; //empty
-        }
+        if (row < 0 || row > NUM_ROWS || column < 0 || column > NUM_COLUMNS)
+            return;
+
+        if (this.boardArray[row][column] != MARK_NONE)
+            return;
+
         if (this.gameState == GameState.X_TURN) {
             this.boardArray[row][column] = MARK_X;
             this.gameState = GameState.O_TURN;
@@ -52,13 +60,25 @@ public class TicTacToeGame {
 
         checkForWin();
 
+
     }
 
     private void checkForWin() {
-        if (!(this.gameState == GameState.X_TURN || this.gameState == GameState.O_TURN)) {
+        if (!(this.gameState == GameState.X_TURN || this.gameState == GameState.O_TURN))
             return;
+
+            if (didPieceWin(MARK_X)){
+                this.gameState = GameState.X_WIN;
+            } else if (didPieceWin(MARK_O)){
+                this.gameState = GameState.O_WIN;
+            } else if (isBoardFull()){
+                Log.d("TicTacToeGgame", "The pattern id full!");
+                this.gameState = GameState.TIE_GAME;
+
+            }
+
         }
-    }
+
 
     private boolean isBoardFull() {
         for (int row = 0; row < NUM_ROWS; row++) {
@@ -86,9 +106,9 @@ public class TicTacToeGame {
 
                 }
             }
-            if (allMarksMatch) {
+            if (allMarksMatch)
                 return true;
-            }
+
 
         }
 
@@ -100,22 +120,38 @@ public class TicTacToeGame {
                     break;
                 }
             }
-            if (allMarksMatch) {
+            if (allMarksMatch)
                 return true;
 
-            }
         }
-        if (this.boardArray[0][0] == markType && this.boardArray[1][1] == markType && this.boardArray[2][2] == markType) {
-            return true;
-        }
-
-        if (this.boardArray[2][0] == markType && this.boardArray[1][1] == markType && this.boardArray[0][2] == markType) {
+        if (this.boardArray[0][0] == markType && this.boardArray[1][1] == markType && this.boardArray[2][2] == markType)
             return true;
 
-        }
+
+        if (this.boardArray[2][0] == markType && this.boardArray[1][1] == markType && this.boardArray[0][2] == markType)
+            return true;
+
+
 
         return false;
     }
+
+    public String stringForButtonAtLocation(int row, int column){
+        String label = "";
+        if (row >= 0 && row < NUM_ROWS && column >= 0 && column<NUM_COLUMNS){
+            if (this.boardArray[row][column] == MARK_X){
+                return "X";
+            } else if (this.boardArray[row][column] == MARK_O){
+                return "O";
+
+            }
+
+        }
+        return label;
+
+    }
+
+
 
     public String stringForGameState() {
         String gameStateLabel = "";
